@@ -60,20 +60,53 @@ int main()
 	cout << endl;
 
 	//Student Processing
-	/*
-	while (true)
-	{
 	string studentName;
-	cout << "Enter student's name (or X to exit):  ";
-	cin >> studentName;
-	if (studentName == "x" || studentName == "X")
-	break;
-	for (int exInc = 1; exInc >= numExams; exInc++)
+	while (studentName != "X" && studentName != "x")
 	{
-	cout << "Enter grade for Exam " << exInc << ":   ";
+		cout << "Enter student's name (or X to exit):  ";
+		if(cin.peek() == '\n') cin.ignore();
+		getline(cin, studentName);
+		if (studentName == "x" || studentName == "X")
+			break;
+
+		//Exam Average
+		double exSum = 0;
+		double grade = 0, exAvg;
+		for (int exInc = 1; exInc <= numExams; exInc++)
+		{
+			cout << "Enter grade for Exam " << exInc << ":   ";
+			cin >> grade;
+			exSum += grade;
+		}
+		exAvg = exSum / numExams;
+
+		//Project average
+		double projSum = 0, projAvg;
+		for (int projInc = 1; projInc <= numProjs; projInc++)
+		{
+			cout << "Enter grade for project " << projInc << ":   ";
+			cin >> grade;
+			projSum += grade;
+		}
+		projAvg = projSum / numProjs;
+
+		//Lab average
+		double labSum = 0, labAvg;
+		for (int labInc = 1; labInc <= numLabs; labInc++)
+		{
+			cout << "Enter grade for lab " << labInc << ":   ";
+			cin >> grade;
+			labSum += grade;
+		}
+		labAvg = labSum / numLabs;
+
+		//Attendance grade
+		double daysAvg = 0, daysSum;
+		cout << "Enter total number of days student attended:    ";
+		cin >> daysSum;
+		daysAvg = (daysSum / numDays) * 100;
 	}
-	}
-	*/
+	
 	system("pause");
 	return(0);
 }
