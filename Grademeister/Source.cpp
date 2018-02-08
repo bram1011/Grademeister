@@ -61,9 +61,14 @@ int main()
 
 	//Student Processing
 	string studentName;
-	while (studentName != "X" && studentName != "x")
+	const int maxStudents = 100;
+	string student[maxStudents];
+	double average[maxStudents];
+	double topAvg = 0, classAvg = 0, classSum = 0;
+	int numStudents = 0;
+	for (int studentInc = 1; studentInc < maxStudents; studentInc++)
 	{
-		cout << "Enter student's name (or X to exit):  ";
+		cout << "Enter student's name (or X to exit):             ";
 		if(cin.peek() == '\n') cin.ignore();
 		getline(cin, studentName);
 		if (studentName == "x" || studentName == "X")
@@ -74,38 +79,110 @@ int main()
 		double grade = 0, exAvg;
 		for (int exInc = 1; exInc <= numExams; exInc++)
 		{
-			cout << "Enter grade for Exam " << exInc << ":   ";
+			cout << "Enter grade for Exam " << exInc << ":                          ";
 			cin >> grade;
 			exSum += grade;
 		}
-		exAvg = exSum / numExams;
+		if (numExams == 0)
+		{
+			exAvg = 100;
+		}
+		else {
+			exAvg = exSum / numExams;
+		}
 
 		//Project average
 		double projSum = 0, projAvg;
 		for (int projInc = 1; projInc <= numProjs; projInc++)
 		{
-			cout << "Enter grade for project " << projInc << ":   ";
+			cout << "Enter grade for project " << projInc << ":                       ";
 			cin >> grade;
 			projSum += grade;
 		}
-		projAvg = projSum / numProjs;
+		if (numProjs == 0)
+		{
+			projAvg = 100;
+		}
+		else {
+			projAvg = projSum / numProjs;
+		}
 
 		//Lab average
 		double labSum = 0, labAvg;
 		for (int labInc = 1; labInc <= numLabs; labInc++)
 		{
-			cout << "Enter grade for lab " << labInc << ":   ";
+			cout << "Enter grade for lab " << labInc << ":                           ";
 			cin >> grade;
 			labSum += grade;
 		}
-		labAvg = labSum / numLabs;
+		if (numLabs == 0)
+		{
+			labAvg = 100;
+		}
+		else 
+		{
+			labAvg = labSum / numLabs;
+		}
 
 		//Attendance grade
 		double daysAvg = 0, daysSum;
-		cout << "Enter total number of days student attended:    ";
+		cout << "Enter total number of days student attended:     ";
 		cin >> daysSum;
-		daysAvg = (daysSum / numDays) * 100;
+		while (daysSum > numDays)
+		{
+			cout << "ERROR: Must be less than or equal to total days:        ";
+			cin >> daysSum;
+		}
+		if (numDays == 0)
+		{
+			daysAvg = 100;
+		}
+		else
+		{
+			daysAvg = (daysSum / numDays) * 100;
+		}
+
+		//Overall average
+		double overallAvg = (exAvg*0.4) + (projAvg*0.3) + (labAvg*0.2) + (daysAvg*0.1);
+		//One number past the decimal
+		cout << fixed << setprecision(1);
+		//Letter grade
+		char letterGrade;
+		if (overallAvg >= 90) {
+			letterGrade = 'A';
+		}
+		else if (overallAvg >= 80 && overallAvg < 90){
+			letterGrade = 'B';
+		}
+		else if (overallAvg >= 70 && overallAvg < 80) {
+			letterGrade = 'C';
+		}
+		else if (overallAvg >= 60 && overallAvg < 70) {
+			letterGrade = 'D';
+		}
+		else {
+			letterGrade = 'E';
+		}
+
+		//Present student report
+		cout << "+--------------------------------------------------------------------------+\n";
+		cout << left << setw(22) << "| Grade Report for: " << studentName << "                                                   |\n";
+		cout << "+--------------------------------------------------------------------------+\n";
+		cout << setw(75) << left << "| Exam Average | Proj Average | Lab Average | Attendance | Overall | Grade |\n";
+		cout << "| " << setw(7.5) << internal << exAvg << setw(8) << internal << " | " << setw(7) << internal << projAvg << setw(8) << internal << " | " << setw(7) << internal << labAvg << setw(7) << internal << " | " << setw(7) << internal << daysAvg << setw(6) << internal << " | " << setw(4) << internal << overallAvg << setw(6) << internal << " | " << setw(3.5) << internal << letterGrade << "   |\n";
+		cout << "+-----------------------------------------------------------------------------+\n";
+
+		//Record keeping
+		average[studentInc - 1] = overallAvg;
+		student[studentInc - 1] = studentName;
+		if (overallAvg > topAvg) {
+			topAvg = overallAvg;
+		}
+		classSum += overallAvg;
+		numStudents++;
 	}
+	classAvg = classSum / numStudents;
+
 	
 	system("pause");
 	return(0);
