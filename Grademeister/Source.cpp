@@ -5,8 +5,8 @@ Project 1
 ----------------------------------------
 Author: Bram Hampton
 Section: 003
-Description:
-Assistance:
+Description: Gradebook
+Assistance: cplusplus.com -- Found the 'internal' command for formatting text
 */
 
 #include <iostream>
@@ -16,6 +16,18 @@ using namespace std;
 
 int main()
 {
+	string studentName;
+	string topStudent;
+	const int maxStudents = 100;
+	string student[maxStudents];
+	double average[maxStudents];
+	double topAvg = 0, classAvg = 0, classSum = 0;
+	int numExams, numProjs, numLabs, numDays, maxExams = 5, maxProjs = 4, maxLabs = 10, maxDays = 30;
+	int numStudents = 0;
+	double daysAvg = 0, daysSum;
+	double overallAvg;
+	char letterGrade;
+	int gradeA = 90, gradeB = 80, gradeC = 70, gradeD = 60;
 	//Header
 	cout << "+-------------------------------------+\n";
 	cout << "|" << setw(30) << "        GRADEMEISTER 900000          |\n";
@@ -23,51 +35,63 @@ int main()
 	cout << "+-------------------------------------+\n";
 	cout << endl;
 	//# of grades
-	int numExams, numProjs, numLabs, numDays;
 	cout << "NUMBER OF GRADED ITEMS THIS SEMESTER\n";
+	cout << "--------------------------------------\n\n";
+
+	//Exams
 	cout << endl << "Enter number of exams:                           ";
 	cin >> numExams;
-	while (numExams < 0 || numExams > 5)
-	{
-		cout << endl << "ERROR: Must be between 0 and 5";
-		cout << endl << "Please enter number of exams:                    ";
-		cin >> numExams;
+	if (numExams < 0 || numExams > maxExams) {
+		do {
+			cout << endl << "ERROR: Must be between 0 and 5";
+			cout << endl << "Please enter number of exams:                    ";
+			cin >> numExams;
+		} while (numExams < 0 || numExams > maxExams);
 	}
+
+	//Projects
 	cout << endl << "Enter number of projects:                        ";
 	cin >> numProjs;
-	while (numProjs < 0 || numProjs > 4)
-	{
-		cout << endl << "ERROR: Must be between 0 and 4";
-		cout << endl << "Please enter number of projects:                 ";
-		cin >> numProjs;
+	if (numProjs < 0 || numProjs > maxProjs) {
+		do {
+			cout << endl << "ERROR: Must be between 0 and 4";
+			cout << endl << "Please enter number of projects:                 ";
+			cin >> numProjs;
+		} while (numProjs < 0 || numProjs > maxProjs);
 	}
+
+	//Labs
 	cout << endl << "Enter number of labs:                            ";
 	cin >> numLabs;
-	while (numLabs < 0 || numLabs > 10)
-	{
-		cout << endl << "ERROR: Must be between 0 and 10";
-		cout << endl << "Please enter number of labs:                     ";
-		cin >> numLabs;
+	if (numLabs < 0 || numLabs > maxLabs) {
+		do {
+			cout << endl << "ERROR: Must be between 0 and 10";
+			cout << endl << "Please enter number of labs:                     ";
+			cin >> numLabs;
+		} while (numLabs < 0 || numLabs > maxLabs);
 	}
+	
+	//Attendance
 	cout << endl << "Enter total number of attendance days:           ";
 	cin >> numDays;
-	while (numDays < 0 || numDays > 30)
-	{
-		cout << endl << "ERROR: Must be between 0 and 30";
-		cout << endl << "Please enter total number of attendance days:    ";
-		cin >> numDays;
+	if (numDays < 0 || numDays > maxDays) {
+		do {
+			cout << endl << "ERROR: Must be between 0 and 30";
+			cout << endl << "Please enter total number of attendance days:    ";
+			cin >> numDays;
+		} while (numDays < 0 || numDays > maxDays);
 	}
-	cout << endl;
+	
+	cout << endl << endl;
 
 	//Student Processing
-	string studentName;
-	const int maxStudents = 100;
-	string student[maxStudents];
-	double average[maxStudents];
-	double topAvg = 0, classAvg = 0, classSum = 0;
-	int numStudents = 0;
 	for (int studentInc = 1; studentInc < maxStudents; studentInc++)
 	{
+		double exSum = 0;
+		double grade = 0, exAvg, labSum = 0, labAvg;
+		double projSum = 0, projAvg;
+		cout << "STUDENT PROCESSING\n";
+		cout << "-------------------\n";
 		cout << "Enter student's name (or X to exit):             ";
 		if(cin.peek() == '\n') cin.ignore();
 		getline(cin, studentName);
@@ -75,8 +99,7 @@ int main()
 			break;
 
 		//Exam Average
-		double exSum = 0;
-		double grade = 0, exAvg;
+		
 		for (int exInc = 1; exInc <= numExams; exInc++)
 		{
 			cout << "Enter grade for Exam " << exInc << ":                          ";
@@ -92,7 +115,7 @@ int main()
 		}
 
 		//Project average
-		double projSum = 0, projAvg;
+		
 		for (int projInc = 1; projInc <= numProjs; projInc++)
 		{
 			cout << "Enter grade for project " << projInc << ":                       ";
@@ -108,7 +131,6 @@ int main()
 		}
 
 		//Lab average
-		double labSum = 0, labAvg;
 		for (int labInc = 1; labInc <= numLabs; labInc++)
 		{
 			cout << "Enter grade for lab " << labInc << ":                           ";
@@ -125,13 +147,13 @@ int main()
 		}
 
 		//Attendance grade
-		double daysAvg = 0, daysSum;
 		cout << "Enter total number of days student attended:     ";
 		cin >> daysSum;
-		while (daysSum > numDays)
-		{
-			cout << "ERROR: Must be less than or equal to total days:        ";
-			cin >> daysSum;
+		if (daysSum > numDays) {
+			do {
+				cout << "ERROR: Must be less than or equal to total days:        ";
+				cin >> daysSum;
+			} while (daysSum > numDays);
 		}
 		if (numDays == 0)
 		{
@@ -143,21 +165,20 @@ int main()
 		}
 
 		//Overall average
-		double overallAvg = (exAvg*0.4) + (projAvg*0.3) + (labAvg*0.2) + (daysAvg*0.1);
+		overallAvg = (exAvg*0.4) + (projAvg*0.3) + (labAvg*0.2) + (daysAvg*0.1);
 		//One number past the decimal
 		cout << fixed << setprecision(1);
 		//Letter grade
-		char letterGrade;
-		if (overallAvg >= 90) {
+		if (overallAvg >= gradeA) {
 			letterGrade = 'A';
 		}
-		else if (overallAvg >= 80 && overallAvg < 90){
+		else if (overallAvg >= gradeB && overallAvg < gradeA){
 			letterGrade = 'B';
 		}
-		else if (overallAvg >= 70 && overallAvg < 80) {
+		else if (overallAvg >= gradeC && overallAvg < gradeB) {
 			letterGrade = 'C';
 		}
-		else if (overallAvg >= 60 && overallAvg < 70) {
+		else if (overallAvg >= gradeD && overallAvg < gradeC) {
 			letterGrade = 'D';
 		}
 		else {
@@ -165,12 +186,18 @@ int main()
 		}
 
 		//Present student report
+		cout << endl << endl << endl;
 		cout << "+--------------------------------------------------------------------------+\n";
-		cout << left << setw(22) << "| Grade Report for: " << studentName << "                                                   |\n";
+		cout << "| Grade Report for: " << left << setw(54) << studentName << " |\n";
 		cout << "+--------------------------------------------------------------------------+\n";
 		cout << setw(75) << left << "| Exam Average | Proj Average | Lab Average | Attendance | Overall | Grade |\n";
-		cout << "| " << setw(7.5) << internal << exAvg << setw(8) << internal << " | " << setw(7) << internal << projAvg << setw(8) << internal << " | " << setw(7) << internal << labAvg << setw(7) << internal << " | " << setw(7) << internal << daysAvg << setw(6) << internal << " | " << setw(4) << internal << overallAvg << setw(6) << internal << " | " << setw(3.5) << internal << letterGrade << "   |\n";
-		cout << "+-----------------------------------------------------------------------------+\n";
+		cout << "|    " << setw(5) << internal << exAvg << "     |    " 
+		<< setw(5) << internal << projAvg << "     |    "
+		<< setw(5) << internal << labAvg << "    |   " 
+		<< setw(5) << internal << daysAvg << "    |  " 
+		<< setw(5) << internal << overallAvg << "  |" 
+		<< setw(5) << internal << letterGrade << "  |\n";
+		cout << "+--------------------------------------------------------------------------+\n\n";
 
 		//Record keeping
 		average[studentInc - 1] = overallAvg;
@@ -183,6 +210,33 @@ int main()
 	}
 	classAvg = classSum / numStudents;
 
+	//Find top student
+	for (int topStudentInc = 0; topStudentInc < numStudents; topStudentInc++) {
+		if (average[topStudentInc] == topAvg) {
+			topStudent = student[topStudentInc];
+		}
+	}
+
+	//Blank Class Report
+	if (student[0] == "") {
+		cout << endl << endl << endl << "+----------------------------------------------------------------------------------------+\n";
+		cout << "|                                    CLASS REPORT                                        |\n";
+		cout << "+----------------------------------------------------------------------------------------+\n";
+		cout << "|                              ERROR: NO STUDENTS ENTERED                                |\n";
+		cout << "+----------------------------------------------------------------------------------------+\n\n";
+		system("pause");
+		return 0;
+	}
+
+
+	//Class Report
+	cout << endl << endl << endl << "+----------------------------------------------------------------------------------------+\n";
+	cout << "|                                    CLASS REPORT                                        |\n";
+	cout << "+----------------------------------------------------------------------------------------+\n";
+	cout << "| Class Average | Top Average | Top Student                                              |\n";
+	cout << "+----------------------------------------------------------------------------------------+\n";
+	cout << "|     " << setw(5) << internal << classAvg << "     |     " << setw(5) << internal << topAvg << "   |   " << setw(55) << left << topStudent << "|\n";
+	cout << "+----------------------------------------------------------------------------------------+\n\n";
 	
 	system("pause");
 	return(0);
